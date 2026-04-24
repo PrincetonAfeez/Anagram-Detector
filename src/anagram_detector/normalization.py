@@ -52,3 +52,9 @@ class DiacriticFolder:
         decomposed = unicodedata.normalize("NFKD", text)
         return "".join(char for char in decomposed if not unicodedata.combining(char))
 
+@dataclass(frozen=True, slots=True)
+class NonAlphaStripper:
+    name: str = "nonalpha"
+
+    def normalize(self, text: str) -> str:
+        return "".join(char for char in text if char.isalpha())
