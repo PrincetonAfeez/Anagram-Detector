@@ -15,3 +15,10 @@ class Normalizer(Protocol):
     def normalize(self, text: str) -> str:
         """Return normalized text."""
 
+@dataclass(frozen=True, slots=True)
+class CaseFolder:
+    name: str = "casefold"
+
+    def normalize(self, text: str) -> str:
+        return text.casefold()
+
