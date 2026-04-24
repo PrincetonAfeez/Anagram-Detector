@@ -22,3 +22,10 @@ class CaseFolder:
     def normalize(self, text: str) -> str:
         return text.casefold()
 
+@dataclass(frozen=True, slots=True)
+class WhitespaceStripper:
+    name: str = "whitespace"
+
+    def normalize(self, text: str) -> str:
+        return "".join(char for char in text if not char.isspace())
+
