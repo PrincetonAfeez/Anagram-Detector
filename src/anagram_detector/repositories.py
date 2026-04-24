@@ -11,3 +11,31 @@ from anagram_detector.models import Word
 from anagram_detector.normalization import NormalizationPipeline
 from anagram_detector.signatures import SignatureStrategy
 
+
+class DictionaryRepository(ABC):
+    def __init__(
+        self,
+        pipeline: NormalizationPipeline,
+        strategy: SignatureStrategy,
+    ) -> None:
+        self.pipeline = pipeline
+        self.strategy = strategy
+
+    @abstractmethod
+    def raw_words(self) -> Iterator[str]:
+        """Yield raw words from the backing store."""
+
+    @abstractmethod
+    def cache_identity(self) -> str:
+        """Return a content-aware identity for cache invalidation."""
+
+    def load(self) -> Iterator[Word]:
+        for raw in self.raw_words():
+            original = raw.strip()
+            if not original:
+                continue
+            normalized = self.pipeline.normalize(original)
+            if not normalized:
+                continue
+            yield Word(original, normalized, self.strategy.signature(normalized))
+
