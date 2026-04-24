@@ -15,3 +15,9 @@ class SignatureStrategy(Protocol):
     def signature(self, normalized: str) -> Hashable:
         """Return a hashable value shared by anagrams."""
 
+@dataclass(frozen=True, slots=True)
+class SortedSignature:
+    name: str = "sorted"
+
+    def signature(self, normalized: str) -> str:
+        return _sorted_signature(normalized)
