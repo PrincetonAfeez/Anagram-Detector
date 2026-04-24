@@ -118,3 +118,10 @@ def _result_to_json(result: MatchResult) -> dict[str, Any]:
         "total_candidates_searched": result.total_candidates_searched,
         "elapsed_ms": round(result.elapsed_ms, 3),
     }
+
+def _word_to_json(word: Word) -> dict[str, str]:
+    return {
+        "original": word.original,
+        "normalized": word.normalized,
+        "signature": str(word.signature),
+    }
