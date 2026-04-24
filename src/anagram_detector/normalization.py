@@ -84,3 +84,14 @@ def _normalize_cached(
     for normalizer in normalizers:
         current = normalizer.normalize(current)
     return current
+
+def default_pipeline(*, fold_diacritics: bool = True) -> NormalizationPipeline:
+    normalizers: list[Normalizer] = [
+        CaseFolder(),
+        WhitespaceStripper(),
+        PunctuationStripper(),
+    ]
+    if fold_diacritics:
+        normalizers.append(DiacriticFolder())
+    normalizers.append(NonAlphaStripper())
+    return NormalizationPipeline(tuple(normalizers))
