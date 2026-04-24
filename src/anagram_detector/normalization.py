@@ -58,3 +58,19 @@ class NonAlphaStripper:
 
     def normalize(self, text: str) -> str:
         return "".join(char for char in text if char.isalpha())
+
+
+_ASCII_PUNCTUATION_TABLE = str.maketrans("", "", string.punctuation)
+
+
+@dataclass(frozen=True, slots=True)
+class NormalizationPipeline:
+    normalizers: tuple[Normalizer, ...]
+
+    def normalize(self, text: str) -> str:
+        return _normalize_cached(self.cache_key, text, self.normalizers)
+
+    @property
+    def cache_key(self) -> str:
+        return "+".join(normalizer.name for normalizer in self.normalizers)
+
