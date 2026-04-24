@@ -90,3 +90,15 @@ def _prime_signature(normalized: str) -> Hashable:
             return ("prime-fallback", _sorted_signature(normalized))
         product *= prime
     return product
+
+def strategy_from_name(name: str) -> SignatureStrategy:
+    strategies: dict[str, SignatureStrategy] = {
+        "sorted": SortedSignature(),
+        "counter": CounterSignature(),
+        "prime": PrimeSignature(),
+    }
+    try:
+        return strategies[name]
+    except KeyError as exc:
+        names = ", ".join(sorted(strategies))
+        raise ValueError(f"Unknown strategy '{name}'. Choose one of: {names}.") from exc
