@@ -10,3 +10,13 @@ class MatchType(Enum):
     SUBSET = "subset"
     SUPERSET = "superset"
     PARTIAL = "partial"
+
+
+@dataclass(frozen=True, slots=True)
+class Word:
+    original: str
+    normalized: str
+    signature: Hashable
+
+    def __str__(self) -> str:
+        return self.original
