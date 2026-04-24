@@ -11,3 +11,5 @@ from typing import ParamSpec, TypeVar, cast
 P = ParamSpec("P")
 T = TypeVar("T")
 
+def default_cache_dir() -> Path:
+    return Path.home() / ".anagram" / "cache"
