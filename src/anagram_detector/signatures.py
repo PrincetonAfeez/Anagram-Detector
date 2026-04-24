@@ -76,3 +76,7 @@ _PRIMES = {
 @lru_cache(maxsize=32768)
 def _sorted_signature(normalized: str) -> str:
     return "".join(sorted(normalized))
+
+@lru_cache(maxsize=32768)
+def _counter_signature(normalized: str) -> frozenset[tuple[str, int]]:
+    return frozenset(Counter(normalized).items())
