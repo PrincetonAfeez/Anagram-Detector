@@ -94,3 +94,12 @@ class CSVFormatter:
                 }
             )
         return output.getvalue().strip()
+
+def formatter_from_name(name: str, *, no_color: bool = False) -> OutputFormatter:
+    if name == "plain":
+        return PlainFormatter(use_color=color_enabled(no_color))
+    if name == "json":
+        return JSONFormatter()
+    if name == "csv":
+        return CSVFormatter()
+    raise ValueError(f"Unknown format '{name}'.")
