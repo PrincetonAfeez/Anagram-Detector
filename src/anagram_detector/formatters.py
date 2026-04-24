@@ -103,3 +103,18 @@ def formatter_from_name(name: str, *, no_color: bool = False) -> OutputFormatter
     if name == "csv":
         return CSVFormatter()
     raise ValueError(f"Unknown format '{name}'.")
+
+def _result_to_json(result: MatchResult) -> dict[str, Any]:
+    return {
+        "query": result.query,
+        "match_type": result.match_type.value,
+        "matches": [_word_to_json(word) for word in result.matches],
+        "multi_word_matches": [
+            [_word_to_json(word) for word in match] for match in result.multi_word_matches
+        ],
+        "groups": [_group_to_json(group) for group in result.groups],
+        "compared_to": result.compared_to,
+        "is_match": result.is_match,
+        "total_candidates_searched": result.total_candidates_searched,
+        "elapsed_ms": round(result.elapsed_ms, 3),
+    }
