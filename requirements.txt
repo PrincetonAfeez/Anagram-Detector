@@ -1,0 +1,4 @@
+hypothesis>=6
+mypy>=1.10
+pytest>=8
+ruff>=0.6
