@@ -95,3 +95,18 @@ def default_pipeline(*, fold_diacritics: bool = True) -> NormalizationPipeline:
         normalizers.append(DiacriticFolder())
     normalizers.append(NonAlphaStripper())
     return NormalizationPipeline(tuple(normalizers))
+
+def pipeline_from_names(names: list[str] | tuple[str, ...]) -> NormalizationPipeline:
+    registry: dict[str, Normalizer] = {
+        "casefold": CaseFolder(),
+        "whitespace": WhitespaceStripper(),
+        "punctuation": PunctuationStripper(),
+        "diacritics": DiacriticFolder(),
+        "nonalpha": NonAlphaStripper(),
+    }
+    unknown = [name for name in names if name not in registry]
+    if unknown:
+        available = ", ".join(sorted(registry))
+        bad = ", ".join(sorted(unknown))
+        raise ValueError(f"Unknown normalizer(s): {bad}. Choose from: {available}.")
+    return NormalizationPipeline(tuple(registry[name] for name in names))
