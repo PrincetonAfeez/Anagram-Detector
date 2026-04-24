@@ -20,3 +20,9 @@ class Word:
 
     def __str__(self) -> str:
         return self.original
+
+@dataclass(frozen=True, slots=True)
+class AnagramGroup:
+    signature: Hashable
+    words: frozenset[Word]
+
