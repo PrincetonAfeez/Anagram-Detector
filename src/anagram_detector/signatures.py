@@ -102,3 +102,6 @@ def strategy_from_name(name: str) -> SignatureStrategy:
     except KeyError as exc:
         names = ", ".join(sorted(strategies))
         raise ValueError(f"Unknown strategy '{name}'. Choose one of: {names}.") from exc
+
+def available_strategy_names() -> tuple[str, ...]:
+    return ("sorted", "counter", "prime")
