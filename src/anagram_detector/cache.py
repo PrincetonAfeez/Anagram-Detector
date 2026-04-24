@@ -13,3 +13,6 @@ T = TypeVar("T")
 
 def default_cache_dir() -> Path:
     return Path.home() / ".anagram" / "cache"
+
+def stable_hash(text: str) -> str:
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
