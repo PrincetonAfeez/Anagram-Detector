@@ -35,3 +35,12 @@ class PunctuationStripper:
 
     def normalize(self, text: str) -> str:
         return text.translate(_ASCII_PUNCTUATION_TABLE)
+
+@dataclass(frozen=True, slots=True)
+class DiacriticFolder:
+    name: str = "diacritics"
+
+    def normalize(self, text: str) -> str:
+        decomposed = unicodedata.normalize("NFKD", text)
+        return "".join(char for char in decomposed if not unicodedata.combining(char))
+
