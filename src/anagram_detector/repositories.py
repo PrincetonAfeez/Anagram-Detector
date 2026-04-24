@@ -56,3 +56,21 @@ class FileDictionaryRepository(DictionaryRepository):
 
     def cache_identity(self) -> str:
         return f"file:{self.path}:{file_content_hash(self.path)}"
+
+class BundledDictionaryRepository(FileDictionaryRepository):
+    def __init__(
+        self,
+        language: str,
+        pipeline: NormalizationPipeline,
+        strategy: SignatureStrategy,
+    ) -> None:
+        data_root = resources.files("anagram_detector").joinpath("data")
+        dictionary = data_root.joinpath(f"{language}.txt")
+        if not dictionary.is_file():
+            raise UnsupportedLanguageError(f"No bundled dictionary exists for language '{language}'.")
+        super().__init__(Path(str(dictionary)), pipeline, strategy)
+        self.language = language
+
+    def cache_identity(self) -> str:
+        return f"bundled:{self.language}:{file_content_hash(self.path)}"
+
