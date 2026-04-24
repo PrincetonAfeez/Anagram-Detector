@@ -1,3 +1,9 @@
+"""Small disk cache utilities.
+
+There is intentionally no eviction policy. Cache keys include a dictionary content hash, so
+source changes create fresh files and old cache files remain until `anagram cache clear`.
+"""
+
 from __future__ import annotations
 
 import functools
@@ -11,20 +17,28 @@ from typing import ParamSpec, TypeVar, cast
 P = ParamSpec("P")
 T = TypeVar("T")
 
+
 def default_cache_dir() -> Path:
+    """Get the default cache directory."""
     return Path.home() / ".anagram" / "cache"
 
+
 def stable_hash(text: str) -> str:
+    """Compute a stable hash of the text."""
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
+
 def file_content_hash(path: Path) -> str:
+    """Compute a hash of the file's content."""
     digest = hashlib.sha256()
     with path.open("rb") as file:
         for chunk in iter(lambda: file.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
 
+
 def disk_cached(path_builder: Callable[P, Path]) -> Callable[[Callable[P, T]], Callable[P, T]]:
+    """Cache a pure function to disk using a path computed from its arguments."""
     def decorator(function: Callable[P, T]) -> Callable[P, T]:
         @functools.wraps(function)
         def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
@@ -45,7 +59,9 @@ def disk_cached(path_builder: Callable[P, Path]) -> Callable[[Callable[P, T]], C
 
     return decorator
 
+
 def cache_info(cache_dir: Path | None = None) -> dict[str, int]:
+    """Get information about the cache."""
     directory = cache_dir or default_cache_dir()
     files = list(directory.glob("*.pickle")) if directory.exists() else []
     return {
@@ -53,7 +69,9 @@ def cache_info(cache_dir: Path | None = None) -> dict[str, int]:
         "bytes": sum(path.stat().st_size for path in files),
     }
 
+
 def clear_cache(cache_dir: Path | None = None) -> int:
+    """Remove all cache files."""
     directory = cache_dir or default_cache_dir()
     if not directory.exists():
         return 0
