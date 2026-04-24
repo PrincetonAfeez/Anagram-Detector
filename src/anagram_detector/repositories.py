@@ -1,3 +1,5 @@
+"""Dictionary repositories."""
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
@@ -13,6 +15,8 @@ from anagram_detector.signatures import SignatureStrategy
 
 
 class DictionaryRepository(ABC):
+    """Repository abstraction for streaming dictionary words."""
+
     def __init__(
         self,
         pipeline: NormalizationPipeline,
@@ -41,6 +45,8 @@ class DictionaryRepository(ABC):
 
 
 class FileDictionaryRepository(DictionaryRepository):
+    """Stream words from a local dictionary file."""
+
     def __init__(
         self,
         path: Path,
@@ -57,13 +63,17 @@ class FileDictionaryRepository(DictionaryRepository):
     def cache_identity(self) -> str:
         return f"file:{self.path}:{file_content_hash(self.path)}"
 
+
 class BundledDictionaryRepository(FileDictionaryRepository):
+    """Use a small bundled dictionary for zero-config runs."""
+
     def __init__(
         self,
         language: str,
         pipeline: NormalizationPipeline,
         strategy: SignatureStrategy,
     ) -> None:
+        """Initialize the bundled dictionary repository."""
         data_root = resources.files("anagram_detector").joinpath("data")
         dictionary = data_root.joinpath(f"{language}.txt")
         if not dictionary.is_file():
@@ -72,9 +82,12 @@ class BundledDictionaryRepository(FileDictionaryRepository):
         self.language = language
 
     def cache_identity(self) -> str:
+        """Return a content-aware identity for cache invalidation."""
         return f"bundled:{self.language}:{file_content_hash(self.path)}"
 
+
 class InMemoryDictionaryRepository(DictionaryRepository):
+    """Repository for tests and embedded use."""
     def __init__(
         self,
         words: list[str] | tuple[str, ...],
@@ -85,8 +98,10 @@ class InMemoryDictionaryRepository(DictionaryRepository):
         self.words = tuple(words)
 
     def raw_words(self) -> Iterator[str]:
+        """Yield raw words from the backing store."""
         yield from self.words
 
     def cache_identity(self) -> str:
+        """Return a content-aware identity for cache invalidation."""
         content = "\n".join(self.words)
         return f"memory:{stable_hash(content)}"
