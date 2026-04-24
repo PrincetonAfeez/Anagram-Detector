@@ -1,3 +1,5 @@
+"""Output formatters."""
+
 from __future__ import annotations
 
 import csv
@@ -9,12 +11,18 @@ from typing import Any, Protocol
 from anagram_detector.colors import Ansi, color_enabled, paint
 from anagram_detector.models import AnagramGroup, MatchResult, Word
 
+
 class OutputFormatter(Protocol):
+    """Format a match result for display."""
+
     def format(self, result: MatchResult) -> str:
         """Return display text."""
 
+
 @dataclass(frozen=True, slots=True)
 class PlainFormatter:
+    """Format a match result as plain text."""
+
     use_color: bool = True
 
     def format(self, result: MatchResult) -> str:
@@ -41,11 +49,15 @@ class PlainFormatter:
 
 class JSONFormatter:
     def format(self, result: MatchResult) -> str:
+        """Format a match result as JSON."""
         return json.dumps(_result_to_json(result), ensure_ascii=False, indent=2)
 
 
 class CSVFormatter:
+    """Format a match result as CSV."""
+
     def format(self, result: MatchResult) -> str:
+        """Format a match result as CSV."""
         output = io.StringIO()
         if result.is_match is not None:
             writer = csv.DictWriter(
@@ -95,7 +107,9 @@ class CSVFormatter:
             )
         return output.getvalue().strip()
 
+
 def formatter_from_name(name: str, *, no_color: bool = False) -> OutputFormatter:
+    """Resolve a formatter by CLI/config name."""
     if name == "plain":
         return PlainFormatter(use_color=color_enabled(no_color))
     if name == "json":
@@ -104,7 +118,9 @@ def formatter_from_name(name: str, *, no_color: bool = False) -> OutputFormatter
         return CSVFormatter()
     raise ValueError(f"Unknown format '{name}'.")
 
+
 def _result_to_json(result: MatchResult) -> dict[str, Any]:
+    """Convert a match result to JSON."""
     return {
         "query": result.query,
         "match_type": result.match_type.value,
@@ -119,18 +135,24 @@ def _result_to_json(result: MatchResult) -> dict[str, Any]:
         "elapsed_ms": round(result.elapsed_ms, 3),
     }
 
+
 def _word_to_json(word: Word) -> dict[str, str]:
+    """Convert a word to JSON."""
     return {
         "original": word.original,
         "normalized": word.normalized,
         "signature": str(word.signature),
     }
 
+
 def _group_to_json(group: AnagramGroup) -> dict[str, Any]:
+    """Convert an anagram group to JSON."""
     return {
         "signature": str(group.signature),
         "words": [_word_to_json(word) for word in _sorted_words(group.words)],
     }
 
+
 def _sorted_words(words: frozenset[Word]) -> tuple[Word, ...]:
+    """Sort words by original string case-folded."""
     return tuple(sorted(words, key=lambda word: word.original.casefold()))
