@@ -80,3 +80,13 @@ def _sorted_signature(normalized: str) -> str:
 @lru_cache(maxsize=32768)
 def _counter_signature(normalized: str) -> frozenset[tuple[str, int]]:
     return frozenset(Counter(normalized).items())
+
+@lru_cache(maxsize=32768)
+def _prime_signature(normalized: str) -> Hashable:
+    product = 1
+    for char in normalized:
+        prime = _PRIMES.get(char)
+        if prime is None:
+            return ("prime-fallback", _sorted_signature(normalized))
+        product *= prime
+    return product
