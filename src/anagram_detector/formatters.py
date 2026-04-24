@@ -37,3 +37,8 @@ class PlainFormatter:
             return "\n".join(word.original for word in result.matches)
 
         return "No matches found."
+
+
+class JSONFormatter:
+    def format(self, result: MatchResult) -> str:
+        return json.dumps(_result_to_json(result), ensure_ascii=False, indent=2)
