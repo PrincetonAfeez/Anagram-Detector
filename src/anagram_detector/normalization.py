@@ -29,3 +29,9 @@ class WhitespaceStripper:
     def normalize(self, text: str) -> str:
         return "".join(char for char in text if not char.isspace())
 
+@dataclass(frozen=True, slots=True)
+class PunctuationStripper:
+    name: str = "punctuation"
+
+    def normalize(self, text: str) -> str:
+        return text.translate(_ASCII_PUNCTUATION_TABLE)
