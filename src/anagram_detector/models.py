@@ -4,3 +4,9 @@ from collections.abc import Hashable
 from dataclasses import dataclass, field
 from enum import Enum
 
+
+class MatchType(Enum):
+    EXACT = "exact"
+    SUBSET = "subset"
+    SUPERSET = "superset"
+    PARTIAL = "partial"
