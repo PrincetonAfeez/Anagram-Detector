@@ -74,3 +74,19 @@ class BundledDictionaryRepository(FileDictionaryRepository):
     def cache_identity(self) -> str:
         return f"bundled:{self.language}:{file_content_hash(self.path)}"
 
+class InMemoryDictionaryRepository(DictionaryRepository):
+    def __init__(
+        self,
+        words: list[str] | tuple[str, ...],
+        pipeline: NormalizationPipeline,
+        strategy: SignatureStrategy,
+    ) -> None:
+        super().__init__(pipeline, strategy)
+        self.words = tuple(words)
+
+    def raw_words(self) -> Iterator[str]:
+        yield from self.words
+
+    def cache_identity(self) -> str:
+        content = "\n".join(self.words)
+        return f"memory:{stable_hash(content)}"
