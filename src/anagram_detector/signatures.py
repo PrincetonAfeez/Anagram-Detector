@@ -21,3 +21,11 @@ class SortedSignature:
 
     def signature(self, normalized: str) -> str:
         return _sorted_signature(normalized)
+
+@dataclass(frozen=True, slots=True)
+class CounterSignature:
+    name: str = "counter"
+
+    def signature(self, normalized: str) -> frozenset[tuple[str, int]]:
+        return _counter_signature(normalized)
+
