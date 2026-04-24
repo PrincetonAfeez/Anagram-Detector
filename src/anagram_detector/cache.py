@@ -45,3 +45,11 @@ def disk_cached(path_builder: Callable[P, Path]) -> Callable[[Callable[P, T]], C
 
     return decorator
 
+def cache_info(cache_dir: Path | None = None) -> dict[str, int]:
+    directory = cache_dir or default_cache_dir()
+    files = list(directory.glob("*.pickle")) if directory.exists() else []
+    return {
+        "files": len(files),
+        "bytes": sum(path.stat().st_size for path in files),
+    }
+
