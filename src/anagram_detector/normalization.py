@@ -74,3 +74,13 @@ class NormalizationPipeline:
     def cache_key(self) -> str:
         return "+".join(normalizer.name for normalizer in self.normalizers)
 
+@lru_cache(maxsize=8192)
+def _normalize_cached(
+    _cache_key: str,
+    text: str,
+    normalizers: tuple[Normalizer, ...],
+) -> str:
+    current = text
+    for normalizer in normalizers:
+        current = normalizer.normalize(current)
+    return current
