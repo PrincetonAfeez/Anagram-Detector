@@ -39,3 +39,20 @@ class DictionaryRepository(ABC):
                 continue
             yield Word(original, normalized, self.strategy.signature(normalized))
 
+
+class FileDictionaryRepository(DictionaryRepository):
+    def __init__(
+        self,
+        path: Path,
+        pipeline: NormalizationPipeline,
+        strategy: SignatureStrategy,
+    ) -> None:
+        super().__init__(pipeline, strategy)
+        self.path = path.expanduser().resolve()
+
+    def raw_words(self) -> Iterator[str]:
+        with self.path.open("r", encoding="utf-8") as file:
+            yield from file
+
+    def cache_identity(self) -> str:
+        return f"file:{self.path}:{file_content_hash(self.path)}"
