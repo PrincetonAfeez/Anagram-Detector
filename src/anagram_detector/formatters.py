@@ -125,3 +125,9 @@ def _word_to_json(word: Word) -> dict[str, str]:
         "normalized": word.normalized,
         "signature": str(word.signature),
     }
+
+def _group_to_json(group: AnagramGroup) -> dict[str, Any]:
+    return {
+        "signature": str(group.signature),
+        "words": [_word_to_json(word) for word in _sorted_words(group.words)],
+    }
