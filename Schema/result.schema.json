@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/anagram-detector/result.schema.json",
+  "title": "Anagram Detector Result",
+  "description": "Output returned after comparing two words or phrases.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "firstText",
+    "secondText",
+    "isAnagram"
+  ],
+  "properties": {
+    "firstText": {
+      "type": "string"
+    },
+    "secondText": {
+      "type": "string"
+    },
+    "normalizedFirstText": {
+      "type": "string"
+    },
+    "normalizedSecondText": {
+      "type": "string"
+    },
+    "isAnagram": {
+      "type": "boolean"
+    },
+    "message": {
+      "type": "string"
+    }
+  }
+}

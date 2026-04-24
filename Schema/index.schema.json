@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/anagram-detector/index.schema.json",
+  "title": "Anagram Detector Schema Index",
+  "description": "Collection schema for Anagram Detector data.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "input": {
+      "$ref": "./input.schema.json"
+    },
+    "result": {
+      "$ref": "./result.schema.json"
+    },
+    "config": {
+      "$ref": "./config.schema.json"
+    },
+    "testCases": {
+      "type": "array",
+      "items": {
+        "$ref": "./test-case.schema.json"
+      }
+    }
+  }
+}
