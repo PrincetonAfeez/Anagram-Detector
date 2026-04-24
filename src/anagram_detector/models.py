@@ -1,3 +1,5 @@
+"""Domain models used by the detector."""
+
 from __future__ import annotations
 
 from collections.abc import Hashable
@@ -6,6 +8,8 @@ from enum import Enum
 
 
 class MatchType(Enum):
+    """Supported matching modes."""
+
     EXACT = "exact"
     SUBSET = "subset"
     SUPERSET = "superset"
@@ -14,6 +18,8 @@ class MatchType(Enum):
 
 @dataclass(frozen=True, slots=True)
 class Word:
+    """A dictionary word plus its normalized and canonical representations."""
+
     original: str
     normalized: str
     signature: Hashable
@@ -21,13 +27,19 @@ class Word:
     def __str__(self) -> str:
         return self.original
 
+
 @dataclass(frozen=True, slots=True)
 class AnagramGroup:
+    """Words sharing the same anagram signature."""
+
     signature: Hashable
     words: frozenset[Word]
 
+
 @dataclass(frozen=True, slots=True)
 class MatchResult:
+    """Rich result object returned by detector queries."""
+
     query: str
     match_type: MatchType
     matches: tuple[Word, ...] = field(default_factory=tuple)
