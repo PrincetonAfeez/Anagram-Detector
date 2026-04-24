@@ -29,3 +29,10 @@ class CounterSignature:
     def signature(self, normalized: str) -> frozenset[tuple[str, int]]:
         return _counter_signature(normalized)
 
+@dataclass(frozen=True, slots=True)
+class PrimeSignature:
+    name: str = "prime"
+
+    def signature(self, normalized: str) -> Hashable:
+        return _prime_signature(normalized)
+
