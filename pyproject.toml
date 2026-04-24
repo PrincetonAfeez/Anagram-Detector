@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "anagram-detector"
+version = "0.1.0"
+description = "A typed, cached anagram detector CLI with pluggable normalization and signature strategies."
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "Anagram Detector" }]
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8",
+  "hypothesis>=6",
+  "ruff>=0.6",
+  "mypy>=1.10",
+]
+
+[project.scripts]
+anagram = "anagram_detector.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+anagram_detector = ["data/*.txt", "py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+files = ["src/anagram_detector"]
