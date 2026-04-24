@@ -44,3 +44,11 @@ class DiacriticFolder:
         decomposed = unicodedata.normalize("NFKD", text)
         return "".join(char for char in decomposed if not unicodedata.combining(char))
 
+@dataclass(frozen=True, slots=True)
+class DiacriticFolder:
+    name: str = "diacritics"
+
+    def normalize(self, text: str) -> str:
+        decomposed = unicodedata.normalize("NFKD", text)
+        return "".join(char for char in decomposed if not unicodedata.combining(char))
+
