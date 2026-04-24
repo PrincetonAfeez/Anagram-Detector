@@ -53,3 +53,11 @@ def cache_info(cache_dir: Path | None = None) -> dict[str, int]:
         "bytes": sum(path.stat().st_size for path in files),
     }
 
+def clear_cache(cache_dir: Path | None = None) -> int:
+    directory = cache_dir or default_cache_dir()
+    if not directory.exists():
+        return 0
+    count = len(list(directory.glob("*")))
+    shutil.rmtree(directory)
+    directory.mkdir(parents=True, exist_ok=True)
+    return count
