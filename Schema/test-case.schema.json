@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/anagram-detector/test-case.schema.json",
+  "title": "Anagram Detector Test Case",
+  "description": "Reusable test case for anagram detection.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "name",
+    "input",
+    "expectedResult"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "input": {
+      "$ref": "./input.schema.json"
+    },
+    "expectedResult": {
+      "type": "boolean"
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

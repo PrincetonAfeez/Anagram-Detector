@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/anagram-detector/input.schema.json",
+  "title": "Anagram Detector Input",
+  "description": "Input data for checking whether two words or phrases are anagrams.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "firstText",
+    "secondText"
+  ],
+  "properties": {
+    "firstText": {
+      "type": "string",
+      "minLength": 1
+    },
+    "secondText": {
+      "type": "string",
+      "minLength": 1
+    },
+    "options": {
+      "$ref": "./config.schema.json"
+    }
+  }
+}

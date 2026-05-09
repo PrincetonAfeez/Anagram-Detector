@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/anagram-detector/config.schema.json",
+  "title": "Anagram Detector Config",
+  "description": "Optional settings used when comparing text values.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "ignoreCase": {
+      "type": "boolean",
+      "default": true
+    },
+    "ignoreSpaces": {
+      "type": "boolean",
+      "default": true
+    },
+    "ignorePunctuation": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}
